@@ -1,0 +1,19 @@
+[package]
+name = "kbauto-customise"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Client brief parsing, AI rewriting, and customisation logic for kbauto"
+
+[dependencies]
+serde = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+kbauto-placeholder = { workspace = true }
+kbauto-provenance = { workspace = true }
+ollama-rs = { version = "0.3", features = ["rustls"] }
+async-trait = "0.1"
+
+[dev-dependencies]
+tokio = { workspace = true }

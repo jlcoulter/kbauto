@@ -1,0 +1,18 @@
+[package]
+name = "kbauto-rebase"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Rebase engine, conflict detection, and diff reports for kbauto"
+
+[dependencies]
+serde = { workspace = true }
+thiserror = { workspace = true }
+kbauto-provenance = { workspace = true }
+kbauto-placeholder = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+kbauto-template = { workspace = true }

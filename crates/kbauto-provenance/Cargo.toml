@@ -1,0 +1,16 @@
+[package]
+name = "kbauto-provenance"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Provenance tracking and frontmatter management for kbauto"
+
+[dependencies]
+serde = { workspace = true }
+serde_yaml = { workspace = true }
+pulldown-cmark = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
