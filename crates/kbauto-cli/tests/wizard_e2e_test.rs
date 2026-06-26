@@ -235,7 +235,10 @@ fn scaffold_creates_valid_skeleton_discovery() {
     assert!(discovery.contains("## "));
     // Should have multiple questions
     let heading_count = discovery.matches("## ").count();
-    assert!(heading_count >= 5, "should have at least 5 discovery questions");
+    assert!(
+        heading_count >= 5,
+        "should have at least 5 discovery questions"
+    );
 }
 
 #[test]

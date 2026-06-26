@@ -189,10 +189,7 @@ pub fn scaffold_client_dir(
 ///
 /// # Errors
 /// Returns an error if the file cannot be written.
-pub fn write_template_path(
-    client_dir: &Path,
-    template_dir: &Path,
-) -> Result<(), ScaffoldError> {
+pub fn write_template_path(client_dir: &Path, template_dir: &Path) -> Result<(), ScaffoldError> {
     let abs_template = template_dir
         .canonicalize()
         .unwrap_or_else(|_| template_dir.to_path_buf());
@@ -219,9 +216,7 @@ pub fn read_template_path(client_dir: &Path) -> Result<PathBuf, TemplatePathErro
     let path_file = client_dir.join(".template-path");
 
     if !path_file.exists() {
-        return Err(TemplatePathError::Missing(
-            client_dir.display().to_string(),
-        ));
+        return Err(TemplatePathError::Missing(client_dir.display().to_string()));
     }
 
     let content = fs::read_to_string(&path_file)?;

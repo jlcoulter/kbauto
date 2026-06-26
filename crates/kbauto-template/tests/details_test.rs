@@ -19,14 +19,8 @@ hello@example.com
 We specialize in small business accounting.
 "#;
     let details = StaticDetails::from_markdown(md, "test").unwrap();
-    assert_eq!(
-        details.get("TEAM_NAME"),
-        Some("We are Example Corp")
-    );
-    assert_eq!(
-        details.get("TEAM_EMAIL"),
-        Some("hello@example.com")
-    );
+    assert_eq!(details.get("TEAM_NAME"), Some("We are Example Corp"));
+    assert_eq!(details.get("TEAM_EMAIL"), Some("hello@example.com"));
     assert_eq!(
         details.get("ABOUT_THE_FIRM"),
         Some("We specialize in small business accounting.")
@@ -52,10 +46,7 @@ fn heading_normalisation_spaces_and_hyphens() {
 fn canonical_key_normalisation() {
     let md = "## Client Phone Number\n0400 123 456\n";
     let details = StaticDetails::from_markdown(md, "test").unwrap();
-    assert_eq!(
-        details.get("CLIENT_PHONE_NUMBER"),
-        Some("0400 123 456")
-    );
+    assert_eq!(details.get("CLIENT_PHONE_NUMBER"), Some("0400 123 456"));
 }
 
 #[test]

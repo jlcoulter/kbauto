@@ -52,7 +52,13 @@ async fn generate_playbook_full_generation() {
     write_brief(brief_dir.path(), sections);
 
     let brief_path = brief_dir.path().join("brief.md");
-    let result = generate_playbook(template_dir.path(), Some(&brief_path), None, output_dir.path()).await;
+    let result = generate_playbook(
+        template_dir.path(),
+        Some(&brief_path),
+        None,
+        output_dir.path(),
+    )
+    .await;
 
     assert!(
         result.is_ok(),
@@ -115,7 +121,13 @@ async fn generate_playbook_partial_brief() {
     write_brief(brief_dir.path(), sections);
 
     let brief_path = brief_dir.path().join("brief.md");
-    let result = generate_playbook(template_dir.path(), Some(&brief_path), None, output_dir.path()).await;
+    let result = generate_playbook(
+        template_dir.path(),
+        Some(&brief_path),
+        None,
+        output_dir.path(),
+    )
+    .await;
 
     assert!(
         result.is_ok(),
@@ -149,7 +161,13 @@ async fn generate_playbook_provenance_on_every_paragraph() {
     write_brief(brief_dir.path(), sections);
 
     let brief_path = brief_dir.path().join("brief.md");
-    let result = generate_playbook(template_dir.path(), Some(&brief_path), None, output_dir.path()).await;
+    let result = generate_playbook(
+        template_dir.path(),
+        Some(&brief_path),
+        None,
+        output_dir.path(),
+    )
+    .await;
 
     assert!(result.is_ok(), "generation should succeed: {:?}", result);
 

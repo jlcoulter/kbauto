@@ -28,8 +28,7 @@ pub use incremental::{IncrementalResult, incremental_update};
 pub use page::TemplatePage;
 pub use scaffold::{
     ScaffoldError, TemplatePathError, WizardPhase, detect_phase, generate_skeleton_details,
-    generate_skeleton_discovery_doc, read_template_path, scaffold_client_dir,
-    write_template_path,
+    generate_skeleton_discovery_doc, read_template_path, scaffold_client_dir, write_template_path,
 };
 pub use template::{PlaybookTemplate, TemplateError, list_page_files, load_template};
 pub use tui_model::{MissingValue, MissingValueForm};

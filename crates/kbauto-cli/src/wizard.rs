@@ -81,7 +81,9 @@ pub async fn run_wizard(config: AppConfig) -> anyhow::Result<()> {
     println!();
 
     // Prompt for client directory
-    let client_dir = prompt_for_path("Enter the path to the client directory (or a new directory to scaffold): ")?;
+    let client_dir = prompt_for_path(
+        "Enter the path to the client directory (or a new directory to scaffold): ",
+    )?;
     let client_dir = PathBuf::from(client_dir.trim());
 
     if !client_dir.exists() {
@@ -114,19 +116,28 @@ async fn run_scaffold_phase(client_dir: &Path, config: &AppConfig) -> anyhow::Re
 
     // Validate template directory (FR-020)
     if !template_dir.exists() {
-        eprintln!("Error: Template directory not found: {}", template_dir.display());
+        eprintln!(
+            "Error: Template directory not found: {}",
+            template_dir.display()
+        );
         std::process::exit(1);
     }
 
     let docs_dir = template_dir.join("docs");
     if !docs_dir.exists() {
-        eprintln!("Error: Missing docs/ subdirectory in: {}", template_dir.display());
+        eprintln!(
+            "Error: Missing docs/ subdirectory in: {}",
+            template_dir.display()
+        );
         std::process::exit(1);
     }
 
     let defaults_path = template_dir.join("defaults.json");
     if !defaults_path.exists() {
-        eprintln!("Error: Missing defaults.json in: {}", template_dir.display());
+        eprintln!(
+            "Error: Missing defaults.json in: {}",
+            template_dir.display()
+        );
         std::process::exit(1);
     }
 
@@ -152,10 +163,22 @@ async fn run_scaffold_phase(client_dir: &Path, config: &AppConfig) -> anyhow::Re
     println!("Client directory scaffolded: {}", client_dir.display());
     println!();
     println!("Files created:");
-    println!("  {}/details.md   — Edit this with client-specific values", client_dir.display());
-    println!("  {}/discovery.md — Edit this with client voice/tone answers", client_dir.display());
-    println!("  {}/kb/          — Output directory (empty, will be populated on generation)", client_dir.display());
-    println!("  {}/.template-path — Template directory reference", client_dir.display());
+    println!(
+        "  {}/details.md   — Edit this with client-specific values",
+        client_dir.display()
+    );
+    println!(
+        "  {}/discovery.md — Edit this with client voice/tone answers",
+        client_dir.display()
+    );
+    println!(
+        "  {}/kb/          — Output directory (empty, will be populated on generation)",
+        client_dir.display()
+    );
+    println!(
+        "  {}/.template-path — Template directory reference",
+        client_dir.display()
+    );
     println!();
     println!("Next steps:");
     println!("  1. Edit details.md and discovery.md with the client's information");
@@ -198,7 +221,8 @@ async fn run_generate_phase(client_dir: &Path, config: &AppConfig) -> anyhow::Re
                 "The template directory recorded in .template-path no longer exists: {}",
                 old_path
             );
-            let new_path = prompt_for_path("Enter the correct path to the playbook template directory: ")?;
+            let new_path =
+                prompt_for_path("Enter the correct path to the playbook template directory: ")?;
             let new_path = PathBuf::from(new_path.trim());
 
             // Validate the new path
@@ -251,7 +275,10 @@ async fn run_generate_phase(client_dir: &Path, config: &AppConfig) -> anyhow::Re
 
     // Check for missing values
     if !result.missing_values.is_empty() {
-        println!("Warning: {} missing value(s) were filled with defaults.", result.missing_values.len());
+        println!(
+            "Warning: {} missing value(s) were filled with defaults.",
+            result.missing_values.len()
+        );
         for mv in &result.missing_values {
             println!("  - {} (no value in details or defaults)", mv.key);
         }
@@ -259,7 +286,10 @@ async fn run_generate_phase(client_dir: &Path, config: &AppConfig) -> anyhow::Re
     }
 
     println!("Next steps:");
-    println!("  1. Preview: cd {} && npx docusaurus build", output_dir.display());
+    println!(
+        "  1. Preview: cd {} && npx docusaurus build",
+        output_dir.display()
+    );
     println!("  2. Publish when ready");
     println!();
 
@@ -294,7 +324,8 @@ async fn run_rebase_or_update_phase(client_dir: &Path, config: &AppConfig) -> an
                 "The template directory recorded in .template-path no longer exists: {}",
                 old_path
             );
-            let new_path = prompt_for_path("Enter the correct path to the playbook template directory: ")?;
+            let new_path =
+                prompt_for_path("Enter the correct path to the playbook template directory: ")?;
             let new_path = PathBuf::from(new_path.trim());
             if !new_path.exists() || !new_path.join("docs").exists() {
                 eprintln!("Error: Invalid template directory: {}", new_path.display());

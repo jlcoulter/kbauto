@@ -27,10 +27,7 @@ Xero, QuickBooks, and MYOB.
         "We have 12 accountants and 3 admin staff."
     );
     assert_eq!(doc.questions[2].question, "What software do you use?");
-    assert_eq!(
-        doc.questions[2].answer,
-        "Xero, QuickBooks, and MYOB."
-    );
+    assert_eq!(doc.questions[2].answer, "Xero, QuickBooks, and MYOB.");
 }
 
 #[test]

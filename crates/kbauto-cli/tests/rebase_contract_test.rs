@@ -38,9 +38,7 @@ fn setup_client_kb(dir: &std::path::Path) {
 #[test]
 fn rebase_invalid_args_exits_nonzero() {
     let mut cmd = Command::cargo_bin("kbauto").unwrap();
-    cmd.arg("rebase")
-        .assert()
-        .failure(); // clap exits with nonzero for missing required args
+    cmd.arg("rebase").assert().failure(); // clap exits with nonzero for missing required args
 }
 
 #[test]

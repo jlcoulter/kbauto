@@ -76,10 +76,7 @@ pub struct CliOverrides {
 pub enum ConfigError {
     /// The config file exists but contains invalid TOML.
     #[error("invalid config file at {path}: {reason}")]
-    InvalidToml {
-        path: String,
-        reason: String,
-    },
+    InvalidToml { path: String, reason: String },
 
     /// IO error reading the config file.
     #[error("IO error reading config file: {0}")]
@@ -182,8 +179,8 @@ impl AppConfig {
 
         // Serialize default config to TOML
         let default_config = Self::default();
-        let toml_content = toml::to_string_pretty(&default_config)
-            .map_err(|e| ConfigError::InvalidToml {
+        let toml_content =
+            toml::to_string_pretty(&default_config).map_err(|e| ConfigError::InvalidToml {
                 path: path.display().to_string(),
                 reason: format!("failed to serialize default config: {e}"),
             })?;
@@ -268,12 +265,16 @@ mod tests {
     fn load_from_valid_toml() {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("config.toml");
-        std::fs::write(&path, r#"
+        std::fs::write(
+            &path,
+            r#"
 ollama_url = "http://myserver:8080"
 ollama_model = "llama3"
 retry_count = 5
 output_format = "json"
-"#).unwrap();
+"#,
+        )
+        .unwrap();
 
         let config = AppConfig::load_from(path).unwrap();
         assert_eq!(config.ollama_url, "http://myserver:8080");
@@ -286,9 +287,13 @@ output_format = "json"
     fn load_from_partial_toml_uses_defaults() {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("config.toml");
-        std::fs::write(&path, r#"
+        std::fs::write(
+            &path,
+            r#"
 ollama_url = "http://myserver:8080"
-"#).unwrap();
+"#,
+        )
+        .unwrap();
 
         let config = AppConfig::load_from(path).unwrap();
         assert_eq!(config.ollama_url, "http://myserver:8080");

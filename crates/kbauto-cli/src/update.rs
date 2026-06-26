@@ -85,10 +85,7 @@ pub fn run(args: UpdateArgs, config: &AppConfig) -> anyhow::Result<()> {
     // Validate new details file
     if !args.new_details.exists() {
         crate::output::print_error(
-            &format!(
-                "New details file not found: {}",
-                args.new_details.display()
-            ),
+            &format!("New details file not found: {}", args.new_details.display()),
             &format,
         );
         std::process::exit(1);

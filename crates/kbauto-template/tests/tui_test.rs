@@ -56,27 +56,26 @@ fn form_with_missing_values() {
 
 #[test]
 fn form_set_value() {
-    let missing = vec![
-        MissingValue {
-            key: "TEAM_NAME".to_string(),
-            description: "Team name".to_string(),
-            default: Some("Default Team".to_string()),
-        },
-    ];
+    let missing = vec![MissingValue {
+        key: "TEAM_NAME".to_string(),
+        description: "Team name".to_string(),
+        default: Some("Default Team".to_string()),
+    }];
     let mut form = MissingValueForm::new(missing);
     form.set_value("TEAM_NAME", "Example Corp");
-    assert_eq!(form.values.get("TEAM_NAME"), Some(&"Example Corp".to_string()));
+    assert_eq!(
+        form.values.get("TEAM_NAME"),
+        Some(&"Example Corp".to_string())
+    );
 }
 
 #[test]
 fn form_set_value_overwrites() {
-    let missing = vec![
-        MissingValue {
-            key: "TEAM_NAME".to_string(),
-            description: "Team name".to_string(),
-            default: Some("Default Team".to_string()),
-        },
-    ];
+    let missing = vec![MissingValue {
+        key: "TEAM_NAME".to_string(),
+        description: "Team name".to_string(),
+        default: Some("Default Team".to_string()),
+    }];
     let mut form = MissingValueForm::new(missing);
     form.set_value("TEAM_NAME", "First");
     form.set_value("TEAM_NAME", "Second");
@@ -106,13 +105,11 @@ fn form_collect_defaults_when_no_user_value() {
 
 #[test]
 fn form_user_value_overrides_default() {
-    let missing = vec![
-        MissingValue {
-            key: "TEAM_NAME".to_string(),
-            description: "Team name".to_string(),
-            default: Some("Default Team".to_string()),
-        },
-    ];
+    let missing = vec![MissingValue {
+        key: "TEAM_NAME".to_string(),
+        description: "Team name".to_string(),
+        default: Some("Default Team".to_string()),
+    }];
     let mut form = MissingValueForm::new(missing);
     form.set_value("TEAM_NAME", "Example Corp");
     let resolved = form.resolve();

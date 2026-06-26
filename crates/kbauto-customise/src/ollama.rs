@@ -52,7 +52,11 @@ impl OllamaRewriter {
     }
 
     /// Build the prompt for the AI model.
-    pub fn build_prompt(section_name: &str, original_text: &str, discovery_context: &str) -> String {
+    pub fn build_prompt(
+        section_name: &str,
+        original_text: &str,
+        discovery_context: &str,
+    ) -> String {
         format!(
             "{CUSTOMISATION_PROMPT}\n\n\
             ## Section: {section_name}\n\n\
@@ -119,10 +123,7 @@ impl OllamaRewriter {
     async fn call_ollama(&self, prompt: &str) -> Result<String, String> {
         // Parse url string (e.g. "http://localhost:11434") into host + port.
         let (host, port) = parse_ollama_url(&self.url)?;
-        let ollama = ollama_rs::Ollama::builder()
-            .host(host)
-            .port(port)
-            .build();
+        let ollama = ollama_rs::Ollama::builder().host(host).port(port).build();
         let request = GenerationRequest::new(self.model.clone(), prompt.to_string());
 
         match ollama.generate(request).await {

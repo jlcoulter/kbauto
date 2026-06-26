@@ -46,7 +46,10 @@ fn e2e_placeholder_extraction_and_resolution() {
         defaults: vec![],
     };
     let result = kbauto_placeholder::resolve_placeholders(content, &brief, &defaults);
-    assert!(result.content.contains("Example"), "should resolve TEAM_NAME");
+    assert!(
+        result.content.contains("Example"),
+        "should resolve TEAM_NAME"
+    );
     assert!(
         result.content.contains("Accounting"),
         "should resolve INDUSTRY"
@@ -182,9 +185,15 @@ async fn e2e_generation_with_details_only() {
     )
     .await;
 
-    assert!(result.is_ok(), "generation with details only should succeed");
+    assert!(
+        result.is_ok(),
+        "generation with details only should succeed"
+    );
     let generation = result.unwrap();
-    assert!(generation.pages_generated >= 2, "should generate at least 2 pages");
+    assert!(
+        generation.pages_generated >= 2,
+        "should generate at least 2 pages"
+    );
     // With details provided, all placeholders should be resolved
     assert!(
         generation.missing_values.is_empty(),
@@ -251,22 +260,25 @@ async fn e2e_generation_detects_missing_values() {
     .unwrap();
 
     // Generate without providing details — should have missing values
-    let result = kbauto_template::generate_playbook(
-        template_dir.path(),
-        None,
-        None,
-        output_dir.path(),
-    )
-    .await;
+    let result =
+        kbauto_template::generate_playbook(template_dir.path(), None, None, output_dir.path())
+            .await;
 
-    assert!(result.is_ok(), "generation should succeed even with missing values");
+    assert!(
+        result.is_ok(),
+        "generation should succeed even with missing values"
+    );
     let generation = result.unwrap();
     assert!(
         !generation.missing_values.is_empty(),
         "should detect missing placeholder values"
     );
     // CONTACT_EMAIL should be missing (no default)
-    let missing_keys: Vec<&str> = generation.missing_values.iter().map(|mv| mv.key.as_str()).collect();
+    let missing_keys: Vec<&str> = generation
+        .missing_values
+        .iter()
+        .map(|mv| mv.key.as_str())
+        .collect();
     assert!(
         missing_keys.contains(&"CONTACT_EMAIL"),
         "CONTACT_EMAIL should be in missing values, got: {missing_keys:?}"
@@ -287,10 +299,8 @@ fn e2e_static_details_parsing() {
     )
     .unwrap();
 
-    let details = kbauto_template::StaticDetails::from_markdown_file(
-        &dir.path().join("details.md"),
-    )
-    .unwrap();
+    let details =
+        kbauto_template::StaticDetails::from_markdown_file(&dir.path().join("details.md")).unwrap();
 
     assert_eq!(details.entries.get("TEAM_NAME").unwrap(), "Example Co");
     assert_eq!(details.entries.get("INDUSTRY").unwrap(), "Tax");
@@ -306,10 +316,9 @@ fn e2e_discovery_document_parsing() {
     )
     .unwrap();
 
-    let discovery = kbauto_template::DiscoveryDocument::from_markdown_file(
-        &dir.path().join("discovery.md"),
-    )
-    .unwrap();
+    let discovery =
+        kbauto_template::DiscoveryDocument::from_markdown_file(&dir.path().join("discovery.md"))
+            .unwrap();
 
     assert_eq!(discovery.questions.len(), 2);
     assert_eq!(

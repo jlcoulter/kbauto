@@ -68,10 +68,7 @@ pub async fn generate_playbook(
 
     // 4. Load discovery document if provided (Q&A pairs for AI rewriting context)
     let _discovery: Option<DiscoveryDocument> = if let Some(disc_path) = discovery_path {
-        Some(
-            DiscoveryDocument::from_markdown_file(disc_path)
-                .map_err(|e| anyhow::anyhow!("{e}"))?,
-        )
+        Some(DiscoveryDocument::from_markdown_file(disc_path).map_err(|e| anyhow::anyhow!("{e}"))?)
     } else {
         None
     };
@@ -108,9 +105,9 @@ pub async fn generate_playbook(
 
         // Collect unresolved placeholder keys
         for key in &result.unresolved_keys {
-            missing_keys.entry(key.clone()).or_insert_with(|| {
-                defaults.get_default(key).map(|s| s.to_string())
-            });
+            missing_keys
+                .entry(key.clone())
+                .or_insert_with(|| defaults.get_default(key).map(|s| s.to_string()));
         }
 
         // Track provenance for each paragraph

@@ -7,7 +7,7 @@
 use crossterm::{
     event::{self, Event, KeyCode, KeyEventKind},
     execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
 use ratatui::{
     Terminal,
@@ -52,7 +52,9 @@ impl std::error::Error for TuiError {}
 /// Displays a scrollable list of missing placeholder keys with descriptions
 /// and text input fields. On submit, returns the entered values as a HashMap.
 /// On cancel, returns `TuiError::Cancelled`.
-pub fn run_missing_value_form(missing: Vec<MissingValue>) -> Result<HashMap<String, String>, TuiError> {
+pub fn run_missing_value_form(
+    missing: Vec<MissingValue>,
+) -> Result<HashMap<String, String>, TuiError> {
     if missing.is_empty() {
         return Ok(HashMap::new());
     }
@@ -84,55 +86,76 @@ fn run_app(
     list_state.select(Some(0));
 
     loop {
-        terminal.draw(|f| {
-            let area = f.area();
+        terminal
+            .draw(|f| {
+                let area = f.area();
 
-            // Layout: header (3 rows) | list (rest - 3 rows) | footer (3 rows)
-            let chunks = Layout::vertical([
-                Constraint::Length(3),
-                Constraint::Min(3),
-                Constraint::Length(3),
-            ])
-            .split(area);
+                // Layout: header (3 rows) | list (rest - 3 rows) | footer (3 rows)
+                let chunks = Layout::vertical([
+                    Constraint::Length(3),
+                    Constraint::Min(3),
+                    Constraint::Length(3),
+                ])
+                .split(area);
 
-            // Header
-            let header = Paragraph::new("Missing Values — Fill in required placeholders")
-                .style(Style::default().add_modifier(Modifier::BOLD).fg(Color::Cyan))
-                .block(Block::default().borders(Borders::BOTTOM));
-            f.render_widget(header, chunks[0]);
-
-            // List of missing values with current input
-            let items: Vec<ListItem> = missing
-                .iter()
-                .enumerate()
-                .map(|(i, mv)| {
-                    let value = form.values.get(&mv.key).cloned().unwrap_or_default();
-                    let default_hint = mv
-                        .default
-                        .as_ref()
-                        .map(|d| format!(" (default: {d})"))
-                        .unwrap_or_default();
-                    let style = if i == current_index {
-                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)
-                    } else {
+                // Header
+                let header = Paragraph::new("Missing Values — Fill in required placeholders")
+                    .style(
                         Style::default()
-                    };
+                            .add_modifier(Modifier::BOLD)
+                            .fg(Color::Cyan),
+                    )
+                    .block(Block::default().borders(Borders::BOTTOM));
+                f.render_widget(header, chunks[0]);
 
-                    let line = format!("{}: {}{}", mv.key, value, if value.is_empty() && mv.default.is_some() { default_hint } else { String::new() });
-                    ListItem::new(line).style(style)
-                })
-                .collect();
+                // List of missing values with current input
+                let items: Vec<ListItem> = missing
+                    .iter()
+                    .enumerate()
+                    .map(|(i, mv)| {
+                        let value = form.values.get(&mv.key).cloned().unwrap_or_default();
+                        let default_hint = mv
+                            .default
+                            .as_ref()
+                            .map(|d| format!(" (default: {d})"))
+                            .unwrap_or_default();
+                        let style = if i == current_index {
+                            Style::default()
+                                .fg(Color::Yellow)
+                                .add_modifier(Modifier::BOLD)
+                        } else {
+                            Style::default()
+                        };
 
-            let list = List::new(items)
-                .block(Block::default().borders(Borders::NONE).title("Fields (Tab/Shift+Tab to navigate, Esc to cancel)"))
-                .highlight_style(Style::default().add_modifier(Modifier::REVERSED));
-            f.render_stateful_widget(list, chunks[1], &mut list_state);
+                        let line = format!(
+                            "{}: {}{}",
+                            mv.key,
+                            value,
+                            if value.is_empty() && mv.default.is_some() {
+                                default_hint
+                            } else {
+                                String::new()
+                            }
+                        );
+                        ListItem::new(line).style(style)
+                    })
+                    .collect();
 
-            // Footer
-            let footer = Paragraph::new("Enter: Submit | Esc/q: Cancel | Tab: Next field")
-                .style(Style::default().fg(Color::DarkGray));
-            f.render_widget(footer, chunks[2]);
-        }).map_err(TuiError::Io)?;
+                let list = List::new(items)
+                    .block(
+                        Block::default()
+                            .borders(Borders::NONE)
+                            .title("Fields (Tab/Shift+Tab to navigate, Esc to cancel)"),
+                    )
+                    .highlight_style(Style::default().add_modifier(Modifier::REVERSED));
+                f.render_stateful_widget(list, chunks[1], &mut list_state);
+
+                // Footer
+                let footer = Paragraph::new("Enter: Submit | Esc/q: Cancel | Tab: Next field")
+                    .style(Style::default().fg(Color::DarkGray));
+                f.render_widget(footer, chunks[2]);
+            })
+            .map_err(TuiError::Io)?;
 
         // Handle input
         if event::poll(std::time::Duration::from_millis(100)).map_err(TuiError::Io)? {

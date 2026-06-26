@@ -105,10 +105,7 @@ pub async fn run(args: GenerateArgs, config: AppConfig) -> anyhow::Result<()> {
     if let Some(ref discovery_path) = args.discovery {
         if !discovery_path.exists() {
             crate::output::print_error(
-                &format!(
-                    "Discovery file not found: {}",
-                    discovery_path.display()
-                ),
+                &format!("Discovery file not found: {}", discovery_path.display()),
                 &format,
             );
             std::process::exit(1);
@@ -167,10 +164,7 @@ pub async fn run(args: GenerateArgs, config: AppConfig) -> anyhow::Result<()> {
                                 );
                             }
                             Err(e) => {
-                                crate::output::print_error(
-                                    &format!("TUI error: {e}"),
-                                    &format,
-                                );
+                                crate::output::print_error(&format!("TUI error: {e}"), &format);
                                 std::process::exit(1);
                             }
                         }
