@@ -31,3 +31,5 @@ jobs:
       run: cargo test --all --verbose
     - name: Clippy
       run: cargo clippy
+    - name: Format
+      run: cargo fmt --check
